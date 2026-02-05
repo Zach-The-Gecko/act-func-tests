@@ -174,7 +174,7 @@ def get_batch_examples(num_examples, test_loader, model, loss_fn):
 def generate_model_visualization(model, input_size):
     print("Generating model visualization...")
     model_graph = draw_graph(model, input_size=input_size, expand_nested=True)
-    model_graph.visual_graph.render(filename='ReLU/model_relu', format='png')
+    model_graph.visual_graph.render(filename='ReLU/model_relu', format='svg')
 
 
 def main():

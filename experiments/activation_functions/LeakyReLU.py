@@ -175,7 +175,7 @@ def generate_model_visualization(model, input_size):
     print("Generating model visualization...")
     model_graph = draw_graph(model, input_size=input_size, expand_nested=True)
     model_graph.visual_graph.render(
-        filename='LeakyReLU/model_LeakyReLU', format='png')
+        filename='LeakyReLU/model_LeakyReLU', format='svg')
 
 
 def main():
