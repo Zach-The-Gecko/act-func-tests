@@ -10,23 +10,41 @@ import os
 
 torch.manual_seed(635215)
 
-device = torch.device("xpu" if torch.xpu.is_available() else "cpu")
-print(f"Using {device} device")
-
-# Define the neural network
+# Device setup
+_device = None
 
 
-class ReLUNeuralNetwork(nn.Module):
-    def __init__(self):
+def get_device():
+    """Get the appropriate device (GPU/XPU/CPU) for training."""
+    global _device
+    if _device is None:
+        _device = torch.device("xpu" if torch.xpu.is_available() else "cpu")
+        print(f"Using {_device} device")
+    return _device
+
+
+device = get_device()
+
+# Define the neural network with configurable activation function
+
+
+class ActivationFunctionNeuralNetwork(nn.Module):
+    def __init__(self, activation_fn):
+        """
+        Creates a CNN with the specified activation function.
+
+        Args:
+            activation_fn: A callable that returns an activation module (e.g., nn.ReLU, nn.LeakyReLU)
+        """
         super().__init__()
-        # Convolutional layers with ReLU and batch normalization
+        # Convolutional layers with configurable activation and batch normalization
         self.conv_block1 = nn.Sequential(
             nn.Conv2d(3, 64, kernel_size=3, padding=1),
             nn.BatchNorm2d(64),
-            nn.ReLU(),
+            activation_fn(),
             nn.Conv2d(64, 64, kernel_size=3, padding=1),
             nn.BatchNorm2d(64),
-            nn.ReLU(),
+            activation_fn(),
             nn.MaxPool2d(2, 2),
             nn.Dropout(0.25),
         )
@@ -34,10 +52,10 @@ class ReLUNeuralNetwork(nn.Module):
         self.conv_block2 = nn.Sequential(
             nn.Conv2d(64, 128, kernel_size=3, padding=1),
             nn.BatchNorm2d(128),
-            nn.ReLU(),
+            activation_fn(),
             nn.Conv2d(128, 128, kernel_size=3, padding=1),
             nn.BatchNorm2d(128),
-            nn.ReLU(),
+            activation_fn(),
             nn.MaxPool2d(2, 2),
             nn.Dropout(0.25),
         )
@@ -45,22 +63,22 @@ class ReLUNeuralNetwork(nn.Module):
         self.conv_block3 = nn.Sequential(
             nn.Conv2d(128, 256, kernel_size=3, padding=1),
             nn.BatchNorm2d(256),
-            nn.ReLU(),
+            activation_fn(),
             nn.Conv2d(256, 256, kernel_size=3, padding=1),
             nn.BatchNorm2d(256),
-            nn.ReLU(),
+            activation_fn(),
             nn.MaxPool2d(2, 2),
             nn.Dropout(0.25),
         )
 
-        # Fully connected layers with ReLU
+        # Fully connected layers with configurable activation
         self.flatten = nn.Flatten()
-        self.linear_relu_stack = nn.Sequential(
+        self.linear_activation_stack = nn.Sequential(
             nn.Linear(256 * 4 * 4, 512),
-            nn.ReLU(),
+            activation_fn(),
             nn.Dropout(0.5),
             nn.Linear(512, 256),
-            nn.ReLU(),
+            activation_fn(),
             nn.Dropout(0.5),
             nn.Linear(256, 10),
         )
@@ -70,7 +88,7 @@ class ReLUNeuralNetwork(nn.Module):
         x = self.conv_block2(x)
         x = self.conv_block3(x)
         x = self.flatten(x)
-        logits = self.linear_relu_stack(x)
+        logits = self.linear_activation_stack(x)
         return logits
 
 
@@ -138,7 +156,7 @@ def test(dataloader, model, loss_fn, capture_batches=0):
     }
 
 
-def train_and_evaluate_model(epochs, train_loader, test_loader, model, loss_fn, optimizer, desired_accuracy=1):
+def train_and_evaluate_model(epochs, train_loader, test_loader, model, loss_fn, optimizer, desired_accuracy=1, output_dir="output"):
     print("Starting training...")
     for epoch in range(epochs):
         print(f"Epoch {epoch+1}\n-------------------------------")
@@ -152,35 +170,75 @@ def train_and_evaluate_model(epochs, train_loader, test_loader, model, loss_fn, 
 
     print("Training complete!")
 
-    torch.save(model.state_dict(), "ReLU/cifar10_relu_model.pth")
-    print("Model saved to ReLU/cifar10_relu_model.pth")
+    model_path = os.path.join(output_dir, "cifar10_model.pth")
+    torch.save(model.state_dict(), model_path)
+    print(f"Model saved to {model_path}")
 
     print("\nFinal evaluation on test set:")
     final_metrics = test(test_loader, model, loss_fn)
     print(f"Final Test Accuracy: {(100*final_metrics['accuracy']):>0.1f}%")
 
 
-def get_batch_examples(num_examples, test_loader, model, loss_fn):
+def get_batch_examples(num_examples, test_loader, model, loss_fn, output_dir="output", filename="data.json"):
     print(f"Capturing {num_examples} batches from the test set...")
     captured_data = test(test_loader, model, loss_fn,
                          capture_batches=num_examples)
-    with open('ReLU/data_relu.json', 'w') as f:
+    output_path = os.path.join(output_dir, filename)
+    with open(output_path, 'w') as f:
         def tensor_converter(o):
             if isinstance(o, torch.Tensor):
                 return o.tolist()
         json.dump(captured_data, f, default=tensor_converter)
+    print(f"Batch examples saved to {output_path}")
 
 
-def generate_model_visualization(model, input_size):
+def generate_model_visualization(model, input_size, output_dir="output", filename="model"):
     print("Generating model visualization...")
     model_graph = draw_graph(model, input_size=input_size, expand_nested=True)
-    model_graph.visual_graph.render(filename='ReLU/model_relu', format='svg')
+    output_path = os.path.join(output_dir, filename)
+    model_graph.visual_graph.render(filename=output_path, format='svg')
+    print(f"Model visualization saved to {output_path}.svg")
 
 
-def main():
-    # Create ReLU output directory if it doesn't exist
-    os.makedirs('ReLU', exist_ok=True)
+def main(activation_fn_name="relu", output_dir=None, epochs=1, desired_accuracy=0.7, capture_batches=1, data_path="../data"):
+    """
+    Train and evaluate a neural network with the specified activation function.
 
+    Args:
+        activation_fn_name (str): Name of the activation function ("relu", "leaky_relu", etc.)
+        output_dir (str): Output directory for saving models and results
+        epochs (int): Number of training epochs
+        desired_accuracy (float): Target accuracy to stop early training
+        capture_batches (int): Number of batches to capture for analysis
+        data_path (str): Path to the CIFAR-10 data directory
+    """
+
+    # Map activation function names to PyTorch modules
+    activation_functions = {
+        "relu": nn.ReLU,
+        "leaky_relu": nn.LeakyReLU,
+        "elu": nn.ELU,
+        "selu": nn.SELU,
+        "gelu": nn.GELU,
+    }
+
+    # Validate and get activation function
+    activation_fn_name = activation_fn_name.lower()
+    if activation_fn_name not in activation_functions:
+        raise ValueError(
+            f"Unknown activation function: {activation_fn_name}. Available: {list(activation_functions.keys())}")
+
+    activation_fn = activation_functions[activation_fn_name]
+
+    # Set output directory
+    if output_dir is None:
+        output_dir = activation_fn_name.replace("_", "")
+
+    # Create output directory if it doesn't exist
+    os.makedirs(output_dir, exist_ok=True)
+
+    print(f"Using activation function: {activation_fn_name}")
+    print(f"Output directory: {output_dir}")
     print("Loading CIFAR-10 dataset...")
 
     # Training transforms with data augmentation
@@ -200,14 +258,14 @@ def main():
     ])
 
     train_dataset = datasets.CIFAR10(
-        root="../data",
+        root=data_path,
         train=True,
         transform=train_transform,
         download=True,
     )
 
     test_dataset = datasets.CIFAR10(
-        root="../data",
+        root=data_path,
         train=False,
         transform=test_transform,
         download=True,
@@ -219,17 +277,28 @@ def main():
     test_loader = DataLoader(
         test_dataset, batch_size=batch_size, shuffle=False)
 
-    model = ReLUNeuralNetwork().to(device)
+    model = ActivationFunctionNeuralNetwork(activation_fn).to(device)
     loss_fn = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
-    train_and_evaluate_model(epochs=1, train_loader=train_loader, test_loader=test_loader,
-                             model=model, loss_fn=loss_fn, optimizer=optimizer, desired_accuracy=.7)
+    train_and_evaluate_model(
+        epochs=epochs,
+        train_loader=train_loader,
+        test_loader=test_loader,
+        model=model,
+        loss_fn=loss_fn,
+        optimizer=optimizer,
+        desired_accuracy=desired_accuracy,
+        output_dir=output_dir
+    )
 
-    get_batch_examples(1, test_loader, model, loss_fn)
+    get_batch_examples(
+        capture_batches,
+        test_loader,
+        model,
+        loss_fn,
+        output_dir=output_dir,
+        filename="data.json"
+    )
 
-    generate_model_visualization(model, input_size=(1, 3, 32, 32))
-
-
-if __name__ == "__main__":
-    main()
+    # generate_model_visualization(model, input_size=(1, 3, 32, 32), output_dir=output_dir, filename="model")

@@ -49,16 +49,10 @@ def strip_csv(input_file, output_file, columns):
 
 if __name__ == "__main__":
     # Hardcoded columns to keep
-    columns = ["A", "B", "AZ"]
+    columns = ["A", "AZ", "DI"]
 
     # Get input and output file paths from command line or use defaults
-    if len(sys.argv) >= 2:
-        input_file = sys.argv[1]
-        output_file = sys.argv[2] if len(
-            sys.argv) >= 3 else input_file.replace(".csv", "_filtered.csv")
-    else:
-        print("Usage: python strip_csv.py <input_file.csv> [output_file.csv]")
-        print(f"Will keep columns: {columns}")
-        sys.exit(1)
+    input_file = "utils/LibreHardwareMonitorLog-2026-02-17.csv"
+    output_file = "utils/output.csv"
 
     strip_csv(input_file, output_file, columns)
