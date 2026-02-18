@@ -49,7 +49,7 @@ def strip_csv(input_file, output_file, columns):
 
 if __name__ == "__main__":
     # Hardcoded columns to keep
-    columns = ["A", "AZ", "DI"]
+    columns = ["A", "DI"]
 
     # Get input and output file paths from command line or use defaults
     input_file = "utils/LibreHardwareMonitorLog-2026-02-17.csv"

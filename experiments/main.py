@@ -6,10 +6,11 @@ import os
 from activation_function import main as run_activation_experiment
 
 # Activation functions to test
-ACTIVATION_FUNCTIONS = ["relu", "leaky_relu"]  # , "elu", "selu", "gelu"]
-NUM_RUNS_PER_FUNCTION = 2
-MAX_EPOCHS = 20
-TARGET_ACCURACY = 0.6
+# , "elu", "selu", "gelu"]
+ACTIVATION_FUNCTIONS = ["relu", "leaky_relu", "gelu"]
+NUM_RUNS_PER_FUNCTION = 5
+MAX_EPOCHS = 25
+TARGET_ACCURACY = 0.75
 DATA_PATH = "./data"
 
 
@@ -39,7 +40,8 @@ def run_experiments():
 
             try:
                 # Set output directory for this run
-                output_dir = os.path.join(activation_fn, f"run_{run_num}")
+                output_dir = os.path.join(
+                    "experiments", activation_fn, f"run_{run_num}")
 
                 # Run the experiment
                 run_activation_experiment(

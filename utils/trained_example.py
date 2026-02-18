@@ -248,7 +248,7 @@ def display_example(json_file_path, example_index=0):
 
 if __name__ == "__main__":
     # Example usage
-    json_path = Path("ReLU/data_relu.json")
+    json_path = Path("experiments/gelu/run_1/data.json")
 
     if json_path.exists():
         display_example(str(json_path), example_index=0)
