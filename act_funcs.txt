@@ -2,5 +2,4 @@ ReLU
 LeakyReLU
 GELU
 ELU
-SoftPlus
 Selu

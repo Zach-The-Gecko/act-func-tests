@@ -10,10 +10,10 @@ ACTIVATION_FUNCTIONS = ["relu",
                         "leaky_relu",
                         "gelu",
                         "elu",
-                        "selu",
-                        "softplus"]
-NUM_RUNS_PER_FUNCTION = 2
-MAX_EPOCHS = 25
+                        "selu",]
+
+NUM_RUNS_PER_FUNCTION = 7
+MAX_EPOCHS = 20
 TARGET_ACCURACY = 0.80
 DATA_PATH = "./data"
 
