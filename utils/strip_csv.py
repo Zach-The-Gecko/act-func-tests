@@ -52,7 +52,7 @@ if __name__ == "__main__":
     columns = ["A", "DI"]
 
     # Get input and output file paths from command line or use defaults
-    input_file = "utils/LibreHardwareMonitorLog-2026-02-20.csv"
+    input_file = "utils/LibreHardwareMonitorLog-2026-02-19.csv"
     output_file = "utils/output.csv"
 
     strip_csv(input_file, output_file, columns)

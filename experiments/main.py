@@ -12,7 +12,7 @@ ACTIVATION_FUNCTIONS = ["relu",
                         "elu",
                         "selu",]
 
-NUM_RUNS_PER_FUNCTION = 7
+NUM_RUNS_PER_FUNCTION = 3
 MAX_EPOCHS = 20
 TARGET_ACCURACY = 0.80
 DATA_PATH = "./data"
