@@ -25,19 +25,23 @@ with open(csv_path, 'r') as f:
     for row in reader:
         csv_data.append(row)
 
-# Parse CSV timestamps (assuming they're on 2026-02-17)
-date_str = "2026-02-17"
-csv_timestamps = []
+# Parse CSV data (assuming timestamps are on 2026-02-18)
+date_str = "2026-02-18"
+parsed_csv_rows = []
 
 for row in csv_data:
-    time_str = row['Time']
-    # Combine date and time
+    time_str = (row.get('Time') or '').strip()
+    gpu_value_str = (row.get('GPU Package') or '').strip()
+
+    if not time_str or not gpu_value_str:
+        continue
+
     datetime_str = f"{date_str} {time_str}"
     try:
         dt = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S")
-        csv_timestamps.append(dt)
+        gpu_value = float(gpu_value_str)
+        parsed_csv_rows.append((dt, gpu_value))
     except ValueError:
-        # Handle edge cases if needed
         continue
 
 # Process each activation function and collect all runs
@@ -54,9 +58,9 @@ for activation_func, data in experiments.items():
 
         # Filter CSV data for this run
         run_data = []
-        for i, timestamp in enumerate(csv_timestamps):
+        for timestamp, gpu_value in parsed_csv_rows:
             if start_time <= timestamp <= end_time:
-                run_data.append(float(csv_data[i]['GPU Package']))
+                run_data.append(gpu_value)
 
         all_runs[run_num] = run_data
         max_data_points = max(max_data_points, len(run_data))
@@ -91,7 +95,7 @@ for activation_func, data in experiments.items():
         end_time = datetime.strptime(run['end'], "%Y-%m-%d %H:%M:%S.%f")
 
         count = 0
-        for timestamp in csv_timestamps:
+        for timestamp, _ in parsed_csv_rows:
             if start_time <= timestamp <= end_time:
                 count += 1
 

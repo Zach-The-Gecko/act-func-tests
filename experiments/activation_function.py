@@ -217,9 +217,10 @@ def main(activation_fn_name="relu", output_dir=None, epochs=1, desired_accuracy=
     activation_functions = {
         "relu": nn.ReLU,
         "leaky_relu": nn.LeakyReLU,
+        "gelu": nn.GELU,
         "elu": nn.ELU,
         "selu": nn.SELU,
-        "gelu": nn.GELU,
+        "softplus": nn.Softplus,
     }
 
     # Validate and get activation function

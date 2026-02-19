@@ -1,10 +1,6 @@
 ReLU
 LeakyReLU
 GELU
-
-ReLU6
 ELU
-Softplus
-SELU
-RReLU
-SiLU
+SoftPlus
+Selu

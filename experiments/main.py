@@ -6,11 +6,15 @@ import os
 from activation_function import main as run_activation_experiment
 
 # Activation functions to test
-# , "elu", "selu", "gelu"]
-ACTIVATION_FUNCTIONS = ["relu", "leaky_relu", "gelu"]
-NUM_RUNS_PER_FUNCTION = 5
+ACTIVATION_FUNCTIONS = ["relu",
+                        "leaky_relu",
+                        "gelu",
+                        "elu",
+                        "selu",
+                        "softplus"]
+NUM_RUNS_PER_FUNCTION = 2
 MAX_EPOCHS = 25
-TARGET_ACCURACY = 0.75
+TARGET_ACCURACY = 0.80
 DATA_PATH = "./data"
 
 
