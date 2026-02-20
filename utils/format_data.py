@@ -25,7 +25,7 @@ with open(csv_path, 'r') as f:
     for row in reader:
         csv_data.append(row)
 
-date_str = "2026-02-19"
+date_str = "2026-02-20"
 parsed_csv_rows = []
 
 for row in csv_data:
