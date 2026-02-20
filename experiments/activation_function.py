@@ -8,7 +8,7 @@ from torchview import draw_graph
 import json
 import os
 
-torch.manual_seed(635215)
+torch.manual_seed(35)
 
 # Device setup
 _device = None
