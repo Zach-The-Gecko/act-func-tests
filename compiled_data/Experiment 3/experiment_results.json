@@ -1,0 +1,142 @@
+{
+  "relu": {
+    "activation_function": "relu",
+    "runs": [
+      {
+        "run_number": 1,
+        "start": "2026-02-20 15:00:45.414",
+        "end": "2026-02-20 15:23:05.728",
+        "duration_seconds": 1340.313665,
+        "status": "successful"
+      },
+      {
+        "run_number": 2,
+        "start": "2026-02-20 15:23:05.728",
+        "end": "2026-02-20 15:45:04.735",
+        "duration_seconds": 1319.007683,
+        "status": "successful"
+      },
+      {
+        "run_number": 3,
+        "start": "2026-02-20 15:45:04.735",
+        "end": "2026-02-20 16:09:03.993",
+        "duration_seconds": 1439.257964,
+        "status": "successful"
+      }
+    ],
+    "status": "3/3 successful",
+    "average_time_seconds": 1366.193104
+  },
+  "leaky_relu": {
+    "activation_function": "leaky_relu",
+    "runs": [
+      {
+        "run_number": 1,
+        "start": "2026-02-20 16:09:03.993",
+        "end": "2026-02-20 16:27:12.597",
+        "duration_seconds": 1088.604009,
+        "status": "successful"
+      },
+      {
+        "run_number": 2,
+        "start": "2026-02-20 16:27:12.597",
+        "end": "2026-02-20 16:47:19.423",
+        "duration_seconds": 1206.825683,
+        "status": "successful"
+      },
+      {
+        "run_number": 3,
+        "start": "2026-02-20 16:47:19.423",
+        "end": "2026-02-20 17:09:23.711",
+        "duration_seconds": 1324.287973,
+        "status": "successful"
+      }
+    ],
+    "status": "3/3 successful",
+    "average_time_seconds": 1206.572555
+  },
+  "gelu": {
+    "activation_function": "gelu",
+    "runs": [
+      {
+        "run_number": 1,
+        "start": "2026-02-20 17:09:23.713",
+        "end": "2026-02-20 17:25:33.982",
+        "duration_seconds": 970.269291,
+        "status": "successful"
+      },
+      {
+        "run_number": 2,
+        "start": "2026-02-20 17:25:33.982",
+        "end": "2026-02-20 17:41:42.853",
+        "duration_seconds": 968.871471,
+        "status": "successful"
+      },
+      {
+        "run_number": 3,
+        "start": "2026-02-20 17:41:42.853",
+        "end": "2026-02-20 17:58:00.009",
+        "duration_seconds": 977.155435,
+        "status": "successful"
+      }
+    ],
+    "status": "3/3 successful",
+    "average_time_seconds": 972.0987323333334
+  },
+  "elu": {
+    "activation_function": "elu",
+    "runs": [
+      {
+        "run_number": 1,
+        "start": "2026-02-20 17:58:00.011",
+        "end": "2026-02-20 18:18:15.387",
+        "duration_seconds": 1215.375788,
+        "status": "successful"
+      },
+      {
+        "run_number": 2,
+        "start": "2026-02-20 18:18:15.388",
+        "end": "2026-02-20 18:36:27.919",
+        "duration_seconds": 1092.531524,
+        "status": "successful"
+      },
+      {
+        "run_number": 3,
+        "start": "2026-02-20 18:36:27.919",
+        "end": "2026-02-20 19:00:41.050",
+        "duration_seconds": 1453.130894,
+        "status": "successful"
+      }
+    ],
+    "status": "3/3 successful",
+    "average_time_seconds": 1253.679402
+  },
+  "selu": {
+    "activation_function": "selu",
+    "runs": [
+      {
+        "run_number": 1,
+        "start": "2026-02-20 19:00:41.050",
+        "end": "2026-02-20 19:28:56.119",
+        "duration_seconds": 1695.068492,
+        "status": "successful"
+      },
+      {
+        "run_number": 2,
+        "start": "2026-02-20 19:28:56.119",
+        "end": "2026-02-20 20:01:19.501",
+        "duration_seconds": 1943.382368,
+        "status": "successful"
+      },
+      {
+        "run_number": 3,
+        "start": "2026-02-20 20:01:19.501",
+        "end": "2026-02-20 20:29:36.351",
+        "duration_seconds": 1696.850307,
+        "status": "successful"
+      }
+    ],
+    "status": "3/3 successful",
+    "average_time_seconds": 1778.4337223333332
+  }
+}
